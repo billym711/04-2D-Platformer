@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/bookPlace1.ogg-b7bec7ee68da8a238bc9c066217bffe3.oggstr"
+
+[deps]
+
+source_file="res://Assets/Audio/bookPlace1.ogg"
+dest_files=[ "res://.import/bookPlace1.ogg-b7bec7ee68da8a238bc9c066217bffe3.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

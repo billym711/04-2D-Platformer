@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 onready var SM = $StateMachine
+onready var Backup = get_node("/root/Game/Player_Container/Backup_Camera")
 
 var velocity = Vector2.ZERO
 var jump_power = Vector2.ZERO
@@ -12,7 +13,7 @@ export var move_speed = 20
 export var max_move = 300
 
 export var jump_speed = 100
-export var max_jump = 1000
+export var max_jump = 2000
 
 export var leap_speed = 100
 export var max_leap = 1000
@@ -25,15 +26,12 @@ var should_direction_flip = true # wether or not player controls (left/right) ca
 
 func _physics_process(_delta):
 	velocity.x = clamp(velocity.x,-max_move,max_move)
-		
-	if should_direction_flip:
-		if direction < 0 and not $AnimatedSprite.flip_h: $AnimatedSprite.flip_h = true
-		if direction > 0 and $AnimatedSprite.flip_h: $AnimatedSprite.flip_h = false
-	
+	if direction < 0 and not $AnimatedSprite.flip_h: $AnimatedSprite.flip_h = true
+	if direction > 0 and $AnimatedSprite.flip_h: $AnimatedSprite.flip_h = false
+
 	if is_on_floor():
 		double_jumped = false
-		set_wall_raycasts(true)
-
+	Backup.position = position
 func is_moving():
 	if Input.is_action_pressed("left") or Input.is_action_pressed("right"):
 		return true
@@ -53,32 +51,6 @@ func set_animation(anim):
 	if $AnimatedSprite.frames.has_animation(anim): $AnimatedSprite.play(anim)
 	else: $AnimatedSprite.play()
 
-func is_on_floor():
-	var fl = $Floor.get_children()
-	for f in fl:
-		if f.is_colliding():
-			return true
-	return false
-
-func is_on_right_wall():
-	if $Wall/Right.is_colliding():
-		return true
-	return false
-
-func is_on_left_wall():
-	if $Wall/Right.is_colliding():
-		return true
-	return false
-
-func get_right_collider():
-	return $Wall/Right.get_collider()
-
-func get_left_collider():
-	return $Wall/Left.get_collider()
-	
-func set_wall_raycasts(is_enabled):
-	$Wall/Left.enabled = is_enabled
-	$Wall/Right.enabled = is_enabled
-
 func die():
+	Backup.current = true
 	queue_free()
